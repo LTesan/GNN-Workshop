@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    pretrain_path = Path(args.pretrain_path)  # Convert path string to a Path object
+    pretrain_path = Path(args.pretrain_path.replace("\\", "/"))  # Convert path string to a Path object
     
 
     # Load a specific rollout simulation from the dataset

@@ -29,8 +29,9 @@ def plot_3D_scatter(z_net, z_gt, X, Y, save_dir='outputs/gifs/', name='Liver_act
     T = z_net.shape[0]  # Number of snapshots
 
     # Ensure save directory exists
-    save_path_mats = save_dir + '/mats/'
-    os.makedirs(os.path.dirname(save_path_mats), exist_ok=True)
+    save_dir = os.fspath(save_dir)
+    save_path_mats = os.path.join(save_dir, 'mats')
+    os.makedirs(save_path_mats, exist_ok=True)
 
     # Save data for MATLAB
     mat_file_path = os.path.join(save_path_mats, f'{name}_data.mat')
@@ -124,8 +125,8 @@ def plot_3D_scatter(z_net, z_gt, X, Y, save_dir='outputs/gifs/', name='Liver_act
     writergif = animation.PillowWriter(fps=5)
 
     # Save as gif
-    save_path = save_dir + '/gifs/'
-    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    save_path = os.path.join(save_dir, 'gifs')
+    os.makedirs(save_path, exist_ok=True)
 
     gif_file_path = os.path.join(save_path, f'{name}.gif')
     anim.save(gif_file_path, writer=writergif)
@@ -299,6 +300,7 @@ def plot_combined(z_net, z_gt, X, Y, save_dir='outputs/gifs/', name='Combined_pl
     Returns:
     None
     """
+    save_dir = os.fspath(save_dir)
     T = z_net.shape[0]  # Number of snapshots
 
     fig = plt.figure(figsize=(10, 8))
@@ -352,9 +354,9 @@ def plot_combined(z_net, z_gt, X, Y, save_dir='outputs/gifs/', name='Combined_pl
     anim = FuncAnimation(fig, animate, frames=T, repeat=False)
     writergif = animation.PillowWriter(fps=5)
 
-    save_path = save_dir + '/gifs/'
-    os.makedirs(os.path.dirname(save_path), exist_ok=True)
-    save_dir = save_path + name + '.gif'
+    save_path = os.path.join(save_dir, 'gifs')
+    os.makedirs(save_path, exist_ok=True)
+    save_dir = os.path.join(save_path, name + '.gif')
 
     anim.save(save_dir, writer=writergif)
     if os.path.exists(save_dir) and with_wandb:
@@ -543,7 +545,7 @@ def boxplot_error(test_error, save_path='outputs/test_statistics/', name='Liver_
     ax.set_facecolor('whitesmoke')
 
     # Save the boxplot image with a transparent background
-    save_path = save_path + name + '_boxplot.png'
+    save_path = os.path.join(os.fspath(save_path), name + '_boxplot.png')
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     plt.savefig(save_path, bbox_inches='tight', transparent=True)
     plt.close()
@@ -639,9 +641,9 @@ def plot_mse_rollout(mse_list_of_rollouts, name, checkpoint_dir=None, save=False
     ax.set_title(f'Mean Squared Error for {name} - All Rollouts', fontsize=16)
 
     # Save the plot locally
-    save_path = save_path + '/plots'
-    os.makedirs(os.path.dirname(save_path), exist_ok=True)
-    save_path = f'{save_path}/{name}_mse_rollouts.png'
+    save_path = os.path.join(os.fspath(save_path), 'plots')
+    os.makedirs(save_path, exist_ok=True)
+    save_path = os.path.join(save_path, f'{name}_mse_rollouts.png')
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     plt.savefig(save_path, bbox_inches='tight')
     plt.close()
@@ -710,7 +712,7 @@ def plot_mse_rollout_mean_std(mse_list_of_rollouts, name, save=False, output_dir
     # Save the plot and data if required
     if save:
         if output_dir is None:
-            output_dir = save_path + '/plots'
+            output_dir = os.path.join(os.fspath(save_path), 'plots')
         os.makedirs(output_dir, exist_ok=True)
 
         # Save the plot
@@ -787,7 +789,7 @@ def plot_frame_2d(z_net, z_gt, X, Y, frame_idx=0, save_dir='outputs/plots/', nam
     plt.tight_layout()
 
     # Save the plot
-    save_path = f"{save_dir}{name}_frame_{frame_idx}_2d.png"
+    save_path = os.path.join(os.fspath(save_dir), f"{name}_frame_{frame_idx}_2d.png")
     os.makedirs(save_dir, exist_ok=True)
     plt.savefig(save_path, bbox_inches='tight', dpi=300)
     print(f"Plot saved to {save_path}")
