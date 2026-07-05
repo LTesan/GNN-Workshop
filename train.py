@@ -35,6 +35,7 @@ if __name__ == '__main__':
     parser.add_argument('--run_name', type=str, default="test", help='Unique identifier for the training run')
     parser.add_argument('--model', type=str, default="poisson", help='Unique identifier for the training run')
     parser.add_argument('--project', type=str, default="Jaca-SummerSchool25-GNNs", help='Project name for organizing runs')
+    parser.add_argument('--noise', type=float, default=0.0001, help='Absolute Gaussian noise std added to input u during training; set 0 to disable')
  
     args = parser.parse_args()
     args = set_constants(args)
